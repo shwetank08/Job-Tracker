@@ -1,0 +1,19 @@
+{
+  "name": "job-tracker-backend",
+  "version": "1.0.0",
+  "description": "backend of job tracker application",
+  "main": "index.js",
+  "scripts": {
+    "dev":"nodemon index.js"
+  },
+  "author": "shwetank singh",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
