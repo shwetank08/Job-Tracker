@@ -3,4 +3,4 @@ const authRole = {
     USER: "USER"
 }
 
-module.exports = authRole
+export default authRole

@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import authRole from "../utils/authRole";
+import authRole from "../utils/authRole.js";
+import bcrypt from "bcrypt";
+import JWT from "jsonwebtoken";
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -12,7 +14,7 @@ const userSchema = mongoose.Schema(
     email: {
       type: String,
       required: [true, "Please provide email"],
-      validate: [validator.isEmail, "please provide valid email"],
+      validate: [validator.isEmail, "Please provide valid email"],
       unique: true,
       trim: true,
     },
@@ -34,10 +36,9 @@ const userSchema = mongoose.Schema(
   }
 );
 
+// Hashing the password before saving it
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
+  if (!this.isModified("password")) return next();
   try {
     this.password = await bcrypt.hash(this.password, 10);
     next();
@@ -46,4 +47,22 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.methods = {
+  generateJWT: function () {
+    return JWT.sign(
+      {
+        id: this._id,
+        email: this.email,
+        role: this.role,
+      },
+      process.env.SECRET,
+      { expiresIn: process.env.EXPIRY }
+    );
+  },
+
+  comparePassword: async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  },
+};
+
+export default mongoose.model("User", userSchema);
