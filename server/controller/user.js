@@ -14,16 +14,6 @@ export const signin = async (req, res) => {
     }
     cookieToken(user,res);
 
-    res.status(200).json({
-      message: "user logged in successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      },
-    });
-
   } catch (err) {
     res.status(500).json({ error: "server error", detail: err.message });
   }
@@ -43,14 +33,7 @@ export const signup = async(req,res) => {
             name, email, password
         })
 
-        res.status(200).json({
-            message: "user signed up successfully",
-            user:{
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role
-            }
-        })
+        cookieToken(user,res);
     }catch(err){
         res.status(500).json({ error: "server error", detail: err.message });
     }
@@ -67,5 +50,34 @@ export const logout = async(req,res) => {
     })
   }catch(err){
     res.status(400).json({error: "server error", detail: err.message});
+  }
+}
+
+export const getUser = async(req,res) => {
+  try{
+    const showUser = await User.findById(req.params.id);
+    if(!showUser){
+      return res.status(400).json({message:"user does not exists"})
+    }
+    res.status(200).json({
+      success: "true",
+      showUser
+    })
+  }catch(err){
+    return res.status(400).json({message: "user does not exists"})
+  }
+}
+export const getAllUser = async(req,res) => {
+  try{
+    const showAllUser = await User.find()
+    if(!showAllUser){
+      return res.status(400).json({message:"user does not exists"})
+    }
+    res.status(200).json({
+      success: "true",
+      showAllUser
+    })
+  }catch(err){
+    return res.status(400).json({message: "user does not exists"})
   }
 }
