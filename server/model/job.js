@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import job_status from "../utils/jobStatus";
+import job_status from "../utils/jobStatus.js";
 
 const jobSchema = new mongoose.Schema({
     company:{

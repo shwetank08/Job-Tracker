@@ -51,7 +51,7 @@ userSchema.methods = {
   generateJWT: function () {
     return JWT.sign(
       {
-        id: this._id,
+        _id: this._id,
         email: this.email,
         role: this.role,
       },

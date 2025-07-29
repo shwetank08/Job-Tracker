@@ -19,7 +19,7 @@ export const isLoggedIn = async (req, res, next) => {
 
     const decode = jwt.verify(token, process.env.SECRET);
 
-    req.user = await User.findById(decode._id, "name email role");
+    req.user = await User.findById(decode.id, "name email role");
 
     next();
   } catch (err) {
