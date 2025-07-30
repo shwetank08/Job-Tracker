@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import job_status from "../utils/jobStatus.js";
+import job_role_status from "../utils/jobRoleStatus.js";
 
 const jobSchema = new mongoose.Schema({
     company:{
@@ -12,8 +12,8 @@ const jobSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        enum: Object.values(job_status),
-        default:job_status.APPLY
+        enum: Object.values(job_role_status),
+        default:job_role_status.ACTIVE
     },
     location:{
         type: String,

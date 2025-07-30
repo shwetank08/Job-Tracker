@@ -11,8 +11,12 @@ export const createJob = async(req,res) => {
     }catch(err){
         res.status(500).json({error: "server error - job creation", detail: err.details});
     }
-
 }
-// export const Job = async(req,res) => {
 
+// export const deleteJob = async(req,res) => {
+//     try{
+        
+//     }catch(err){
+//         res.status(500).json({error: "server error - job deletion", detail: err.detail});
+//     }
 // }
