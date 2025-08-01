@@ -5,15 +5,14 @@ import userRoutes from './routes/user.js';
 import jobRoutes from './routes/job.js';
 import cookieParser from "cookie-parser";
 
-
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
 app.use(express.json());
 app.use(cookieParser());
+
 app.use('/api',userRoutes);
 app.use('/api',jobRoutes);
 
