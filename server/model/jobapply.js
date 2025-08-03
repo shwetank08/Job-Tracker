@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
-import job_status from "../utils/jobStatus";
+import mongoose, { model } from "mongoose";
+import job_status from "../utils/jobStatus.js";
 
-const jobapply = new mongoose.model({
+const jobapply = new mongoose.Schema({
   user: {
-    type: new mongoose.Schema.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   job: {
-    type: new mongoose.Schema.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Job",
     required: true,
   },
@@ -22,7 +22,9 @@ const jobapply = new mongoose.model({
     default: job_status.APPLIED
   },
   appliedAt: {
-    type: Date(),
+    type: Date,
     default: Date.now()
   }
 });
+
+export default mongoose.model("ApplyJob", jobapply); 

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from './routes/user.js';
 import jobRoutes from './routes/job.js';
 import cookieParser from "cookie-parser";
+import jobapply from "./routes/jobapply.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 app.use('/api',userRoutes);
 app.use('/api',jobRoutes);
+app.use('/api',jobapply);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
