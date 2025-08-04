@@ -43,8 +43,8 @@ export const isAdmin = async (req, res, next) => {
 
     const decode = jwt.verify(token, process.env.SECRET);
 
-    req.user = await User.findById(decode._id, "name email role");
-
+    req.user = await User.findById(decode.id, "name email role");
+    
     if(req.user?.role != "ADMIN"){
         res.status(400).json({message: "Not authorized to access this route"})
     }
