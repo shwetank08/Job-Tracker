@@ -37,14 +37,44 @@ export const deleteApplication = async(req,res) => {
     try{
       const jobId = req.params.id;
       
-      const deletedApplication = await job.findByIdAndDelete(jobId);
+      const deletedApplication = await jobapply.findByIdAndDelete(jobId);
 
       if(!deletedApplication){
         return res.status(404).json({message: "job application not found"});
       }
 
-      res.status(200).json({message: "job deleted", deletedApplication});
+      res.status(200).json({message: "job application deleted", deletedApplication});
     }catch(err){
       res.status(400).json({message: "issue with delete job application", error: err.message})
     }
 }
+export const getApplication = async(req,res) => {
+    try{
+      const jobId = req.params.id;
+      
+      const jobApplication = await jobapply.findById(jobId);
+
+      if(!jobApplication){
+        return res.status(404).json({message: "job application not found"});
+      }
+
+      res.status(200).json({message: "job application found", jobApplication});
+    }catch(err){
+      res.status(400).json({message: "issue with finding job application", error: err.message})
+    }
+}
+export const getAllJobApplication = async(req,res) => {
+    try{
+
+      const jobApplications = await jobapply.find();
+
+      if(!jobApplications){
+        return res.status(404).json({message: "job applications not found"});
+      }
+
+      res.status(200).json({message: "job applications found", jobApplications});
+    }catch(err){
+      res.status(400).json({message: "issue with delete job application", error: err.message})
+    }
+}
+

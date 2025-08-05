@@ -33,7 +33,7 @@ export const signup = async(req,res) => {
             name, email, password
         })
 
-        cookieToken(user,res);
+        cookieToken(newUser,res);
     }catch(err){
         res.status(500).json({ error: "server error", detail: err.message });
     }
@@ -79,5 +79,48 @@ export const getAllUser = async(req,res) => {
     })
   }catch(err){
     return res.status(400).json({message: "user does not exists"})
+  }
+}
+
+export const deleteUser = async(req,res)=>{
+  try{
+    const userId = req.user.id;
+    if(!userId){
+      return res.status(400).json({message: "user does not exists"});
+    }
+    const deleteUser = await User.findByIdAndDelete(userId);
+
+    if(!deleteUser){
+      return res.status(400).json({message: "user not found"})
+    }
+
+    res.clearCookie("token",{
+      httpOnly: true
+    });
+
+    res.status(200).json({message: "User deleted successfully", deleteUser});
+  }catch(err){
+    return res.status(400).json({message: "user deletion failed!"})
+  }
+}
+
+export const updateUser = async(req,res) => {
+  try{
+    const userId = req.user.id
+    const userToUpdate = await User.findByIdAndUpdate(userId,req.body,{
+      new: true,
+      runValidators: true,
+    })
+    if(!userToUpdate){
+      return res.status(400).json({message: "user not found"});
+    }
+
+    res.status(200).json({
+      success: true,
+      userToUpdate
+    })
+
+  }catch(err){
+    return res.status(400).json({message: "user updation failed"})
   }
 }
