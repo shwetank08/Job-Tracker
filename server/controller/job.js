@@ -53,7 +53,7 @@ export const getJob = async (req, res) => {
     }
     res.status(200).json({
       success: "true",
-      showAllJob,
+      showJob,
     });
   } catch (err) {
     res
