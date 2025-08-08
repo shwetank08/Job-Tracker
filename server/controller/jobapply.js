@@ -1,7 +1,5 @@
-import job from "../model/job.js";
 import jobapply from "../model/jobapply.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import path from "path"
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const applyJob = async (req, res) => {
   try {
@@ -36,6 +34,7 @@ export const applyJob = async (req, res) => {
       user: userId,
       job: jobId,
       resume: resumeUpload.secure_url,
+      public_id: resumeUpload.public_id
     });
     res.status(201).json({ success: true, applyNewJob });
   } catch (err) {
@@ -47,6 +46,21 @@ export const applyJob = async (req, res) => {
 export const deleteApplication = async (req, res) => {
   try {
     const jobId = req.params.id;
+
+    const getJob = await jobapply.findById(jobId);
+
+    if(!getJob){
+      return res.status(400).json({message: "job not found"});
+    }
+
+    console.log(getJob);
+    
+
+    if(getJob.public_id){
+      console.log("public_id ", getJob.public_id);
+      
+      await deleteFromCloudinary(getJob.public_id);
+    }
 
     const deletedApplication = await jobapply.findByIdAndDelete(jobId);
 
