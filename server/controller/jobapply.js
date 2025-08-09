@@ -53,12 +53,7 @@ export const deleteApplication = async (req, res) => {
       return res.status(400).json({message: "job not found"});
     }
 
-    console.log(getJob);
-    
-
-    if(getJob.public_id){
-      console.log("public_id ", getJob.public_id);
-      
+    if(getJob.public_id){      
       await deleteFromCloudinary(getJob.public_id);
     }
 
