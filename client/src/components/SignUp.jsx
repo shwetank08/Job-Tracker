@@ -1,6 +1,8 @@
 import React from "react";
 
 const SignUp = () => {
+  console.log("inside signup component");
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-500 to-purple-600 px-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm space-y-6">

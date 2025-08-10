@@ -1,11 +1,17 @@
-import React from 'react'
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-
+import Header from './components/Header';
+import {Outlet, useLocation} from 'react-router-dom'
 const App = () => {
-  return (
+
+  const location = useLocation();
+
+  const hidePaths = ['/signin', '/signin'];
+
+  const shouldHeaderDisplay = !hidePaths.includes(location.pathname);
+
+  return(
     <>
-      <SignUp/>
+      {shouldHeaderDisplay && <Header/>}
+      <Outlet/>
     </>
   )
 }
