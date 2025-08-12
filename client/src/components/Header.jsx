@@ -9,6 +9,9 @@ const Header = () => {
 
         <nav className="flex space-x-6 text-gray-700 font-medium">
           <a href="#" className="hover:text-indigo-600 transition-colors">
+            Dashboard
+          </a>
+          <a href="#" className="hover:text-indigo-600 transition-colors">
             Jobs
           </a>
           <a href="#" className="hover:text-indigo-600 transition-colors">

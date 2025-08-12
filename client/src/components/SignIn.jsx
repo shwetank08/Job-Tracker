@@ -1,6 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:5000/api/signin", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    if(!res){
+      console.log ("PROBLEM WITH FETCH SIGNIN");
+     
+    }
+    const data = await res.json();
+    if(data.token){
+      localStorage.setItem("token", data.token);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-500 to-purple-600 px-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm space-y-6">
@@ -20,6 +46,8 @@ const SignIn = () => {
               type="email"
               placeholder="you@example.com"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </div>
 
@@ -31,10 +59,15 @@ const SignIn = () => {
               type="password"
               placeholder="••••••••"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
           </div>
 
-          <button className="w-full bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer text-white p-2 rounded-md">
+          <button
+            className="w-full bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer text-white p-2 rounded-md"
+            onClick={handleSubmit}
+          >
             Sign In
           </button>
         </form>
