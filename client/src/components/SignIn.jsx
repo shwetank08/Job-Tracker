@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
+  let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch("http://localhost:5000/api/signin", {
@@ -12,23 +14,29 @@ const SignIn = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body:JSON.stringify({
-        email: email,
-        password: password
-      })
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     });
-    if(!res){
-      console.log ("PROBLEM WITH FETCH SIGNIN");
-     
-    }
+
     const data = await res.json();
-    if(data.token){
-      localStorage.setItem("token", data.token);
+    setError(data.error)
+
+    if (!res) {
+      console.log("PROBLEM WITH FETCH SIGNIN");
+    }
+
+    console.log(data.error);
+
+    if (data.token) {
+      navigate("/");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-500 to-purple-600 px-4">
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-extrabold text-gray-900">
