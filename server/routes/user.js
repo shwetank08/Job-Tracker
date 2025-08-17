@@ -1,11 +1,12 @@
 import express from 'express';
-import {deleteUser, getAllUser, getUser, logout, signin, signup, updateUser} from '../controller/user.js'
+import {deleteUser, getAllUser, getLoggedInUser, getUser, logout, signin, signup, updateUser} from '../controller/user.js'
 import { isLoggedIn } from '../middleware/userAuth.js';
 
 const router = express.Router();
 
 router.post('/signin', signin);
 router.post('/signup', signup);
+router.get('/me', isLoggedIn, getLoggedInUser);
 router.get('/logout', isLoggedIn, logout);
 router.get('/:id/getuser', isLoggedIn, getUser);
 router.get('/users', isLoggedIn, getAllUser);

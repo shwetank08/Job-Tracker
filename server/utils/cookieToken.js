@@ -15,4 +15,4 @@ const cookieToken = (user, res) => {
   });
 };
 
-export default cookieToken
+export default cookieToken;

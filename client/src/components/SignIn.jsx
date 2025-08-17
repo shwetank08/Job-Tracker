@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext.jsx";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { setUser } = useAuth()
+
   let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,14 +24,20 @@ const SignIn = () => {
       }),
     });
 
-    const data = await res.json();
-    setError(data.error)
-
     if (!res) {
       console.log("PROBLEM WITH FETCH SIGNIN");
+      return;
     }
 
-    console.log(data.error);
+    const data = await res.json();
+
+    if (data.user) {
+      setUser(data.user); 
+      setError(null);
+    } else {
+      setUser(null);
+      setError(data.error); 
+    }
 
     if (data.token) {
       navigate("/");

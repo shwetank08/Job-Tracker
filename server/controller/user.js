@@ -1,5 +1,27 @@
 import cookieToken from "../utils/cookieToken.js";
 import User from "../model/user.js"
+import jwt from "jsonwebtoken";
+
+export const getLoggedInUser = async(req, res) => {
+  try{
+    const token = req.cookies.token;
+    if(!token){
+      return res.status(500).json({error: "Not authenticated"})
+    }
+    console.log("token", token);
+    
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const getUser = await User.findById(decoded.id).select("-password");
+    if(!getUser){
+      return res.status(400).json("user not found");
+    }
+
+    res.status(200).json({getUser,token});
+
+  }catch(err){
+    return res.status(401).json({message: "failed to fetch user"});
+  }
+}
 
 export const signin = async (req, res) => {
   try {
