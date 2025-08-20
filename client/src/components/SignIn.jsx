@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext.jsx";
 
 const SignIn = () => {
@@ -92,9 +92,9 @@ const SignIn = () => {
 
         <div className="text-sm text-center text-gray-500">
           Don’t have an account?{" "}
-          <a href="#" className="text-indigo-600 hover:underline font-medium">
+          <Link to="/signup" className="text-indigo-600 hover:underline font-medium">
             Sign up
-          </a>
+          </Link>
         </div>
       </div>
     </div>

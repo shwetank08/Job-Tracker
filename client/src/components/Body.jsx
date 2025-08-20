@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -8,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+
 
 const Body = () => {
   const months = [
@@ -45,8 +47,8 @@ const Body = () => {
       }
 
       const data = await callApi.json();
-      console.log(data.jobApplications?.appliedAt);
-      
+      console.log("data we are getting in body: ", data);
+        
       setJobsApplied(data.jobApplications || []);
       setDataLineChart(buildChartData(data.jobApplications || []))
       setJobStatus(getStatusCount(data.jobApplications || []))
@@ -87,7 +89,7 @@ const Body = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 p-4">
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4 hover:bg-[#6366f1] hover:text-shadow-white transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
           <span className="text-2xl font-bold">{jobsApplied.length}</span>
-          <span className="text-gray-500 text-sm">Total Jobs</span>
+          <span className="text-gray-500 text-sm"><Link to="/">Total Jobs</Link></span>
         </div>
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4">
           <span className="text-2xl font-bold">

@@ -4,7 +4,7 @@ const App = () => {
 
   const location = useLocation();
 
-  const hidePaths = ['/signin', '/signin'];
+  const hidePaths = ['/signin', '/signup'];
 
   const shouldHeaderDisplay = !hidePaths.includes(location.pathname);
 
