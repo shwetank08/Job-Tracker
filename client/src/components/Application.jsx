@@ -1,20 +1,19 @@
+import { useEffect, useState } from "react";
+import { fetchApplication } from "../utility/getAllApplicaiton";
+
 const Application = () => {
-  const fetchData = async () => {
-    try {
-      const callApi = await fetch("http://localhost:5000/api/getapplications", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!callApi) {
-        throw new Error(`HTTP error! status: ${callApi.status}`);
-      }
-    } catch (err) {
-      console.log(err);
+  
+  const [application, setApplication] = useState({})
+
+  useEffect(()=>{
+    const loadApplication = async() => {
+    const data = await fetchApplication("http://localhost:5000/api/getapplications");
+    console.log(data);
+    setApplication(data)
     }
-  };
+    loadApplication();
+  },[])
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* Top Controls */}
@@ -26,6 +25,9 @@ const Application = () => {
             className="ml-2 outline-none w-full text-sm"
           />
         </div>
+        <button className="px-4 py-2 border rounded-lg text-sm bg-gray-100 hover:bg-gray-200">
+          Search
+        </button>
         <button className="px-4 py-2 border rounded-lg text-sm bg-gray-100 hover:bg-gray-200">
           Filter
         </button>
