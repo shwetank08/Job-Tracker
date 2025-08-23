@@ -9,7 +9,8 @@ import SignUp from "./components/SignUp.jsx";
 import Error from "./components/Error.jsx";
 import { AuthProvider } from "./context/authContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { Component } from "react";
+import Application from "./components/Application.jsx";
+import Jobs from "./components/Jobs.jsx";
 
 let appRouter = createBrowserRouter([
   {
@@ -18,7 +19,11 @@ let appRouter = createBrowserRouter([
     children: [
       {
         Component: ProtectedRoute,
-        children: [{ index: true, Component: Body }],
+        children: [
+          { index: true, Component: Body },
+          { path: "applications", Component: Application },
+          { path: "jobs", Component: Jobs },
+        ],
       },
       { path: "signin", Component: SignIn },
       { path: "signup", Component: SignUp },

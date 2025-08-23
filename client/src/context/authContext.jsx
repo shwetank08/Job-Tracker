@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       }
     };
     checkAuth();
-  }});
+  }},[user]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>

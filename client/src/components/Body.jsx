@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { fetchApplication } from "../utility/getAllApplicaiton";
 
 
 const Body = () => {
@@ -33,29 +34,17 @@ const Body = () => {
     months.map(m => ({ month: m, applications: 0 }))
   );
 
-  const fetchData = async () => {
-    try {
-      const callApi = await fetch("http://localhost:5000/api/getapplications", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!callApi) {
-        throw new Error(`HTTP error! status: ${callApi.status}`);
-      }
-
-      const data = await callApi.json();
-      console.log("data we are getting in body: ", data);
-        
-      setJobsApplied(data.jobApplications || []);
-      setDataLineChart(buildChartData(data.jobApplications || []))
-      setJobStatus(getStatusCount(data.jobApplications || []))
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    const loadApplication = async() => {
+    const data = await fetchApplication("http://localhost:5000/api/getapplications");
+    console.log(data);
+    
+    setJobsApplied(data.jobApplications || []);
+    setDataLineChart(buildChartData(data.jobApplications || []))
+    setJobStatus(getStatusCount(data.jobApplications || []))
     }
-  };
+    loadApplication();
+  }, []);
 
   const buildChartData = (jobsApplied) => {
     const originalData = months.map(m=>({month: m, application: 0}));
@@ -75,9 +64,7 @@ const Body = () => {
   };
 
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  
 
 
   return (
@@ -87,26 +74,34 @@ const Body = () => {
       </div>
       {console.log(dataLineChart)}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 p-4">
+         <Link to="/applications">
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4 hover:bg-[#6366f1] hover:text-shadow-white transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
           <span className="text-2xl font-bold">{jobsApplied.length}</span>
-          <span className="text-gray-500 text-sm"><Link to="/">Total Jobs</Link></span>
+          <span className="text-gray-500 text-sm">Total Jobs</span>
         </div>
+        </Link>
+         <Link to="/applications">
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4">
           <span className="text-2xl font-bold">
             {jobStatus.INTERVIEWED || 0}
           </span>
           <span className="text-gray-500 text-sm">Interviews</span>
         </div>
+        </Link>
+         <Link to="/applications">
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4">
           <span className="text-2xl font-bold">{jobStatus.OFFER || 0}</span>
           <span className="text-gray-500 text-sm">Offers</span>
         </div>
+        </Link>
+        <Link to="/applications">
         <div className="aspect-square flex flex-col items-center justify-center bg-white shadow rounded-lg border-2 border-black p-2 sm:p-4">
           <span className="text-2xl font-bold">
             {jobStatus.REJECTED || 0}
           </span>
           <span className="text-gray-500 text-sm">Rejection</span>
         </div>
+        </Link>
       </div>
       <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-4">
         <div className="bg-white shadow rounded-lg p-2 sm:p-4 h-64 sm:h-80">
