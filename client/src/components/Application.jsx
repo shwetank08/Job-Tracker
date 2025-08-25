@@ -3,9 +3,12 @@ import { fetchApplication } from "../utility/getAllApplicaiton";
 import { fetchJobDescription } from "../utility/getAllJobs";
 import ToggleText from "../utility/ToggleText";
 
+import { Filter, Search } from "lucide-react";
+
 const Application = () => {
   const [application, setApplication] = useState([{}]);
   const [jobDetails, setJobDetails] = useState([{}]);
+  const [query, setQuery] = useState("");
   useEffect(() => {
     const loadApplication = async () => {
       const data = await fetchApplication(
@@ -41,22 +44,29 @@ const Application = () => {
 
   console.log(appliedJobs);
 
+  const handleSearch = () => {
+    
+  }
+
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-6 max-w-5xl mx-auto flex justify-center items-center flex-col">
+      
       {/* Top Controls */}
       <div className="flex items-center gap-3 mb-6">
         <div className="flex items-center bg-white border rounded-lg px-3 py-2 shadow-sm w-full max-w-md">
           <input
             type="text"
+            value={query}
+            onChange={(e)=>setQuery(e.target.value)}
             placeholder="Search applications..."
             className="ml-2 outline-none w-full text-sm"
           />
         </div>
-        <button className="px-4 py-2 border rounded-lg text-sm bg-gray-100 hover:bg-gray-200">
-          Search
+        <button className="px-4 py-2" onClick={()=>handleSearch(query)}>
+          <Search className="w-6 h-6 text-indigo-600 transform transition-transform duration-300 hover:scale-105 cursor-pointer" />
         </button>
-        <button className="px-4 py-2 border rounded-lg text-sm bg-gray-100 hover:bg-gray-200">
-          Filter
+        <button className="px-4 py-2" onClick={handleFilter}>
+          <Filter className="w-6 h-6 text-indigo-600 transform transition-transform duration-300 hover:scale-105 cursor-pointer" />
         </button>
       </div>
 
@@ -72,7 +82,7 @@ const Application = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <h1 className="text-lg font-semibold text-gray-900">
-                    {element.jobList?.role}
+                    {element.jobList?.company}
                   </h1>
                   <h2 className="text-sm text-gray-500">
                     {element.jobList?.position}

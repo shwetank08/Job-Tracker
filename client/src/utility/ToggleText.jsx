@@ -6,7 +6,7 @@ const ToggleText = ({text, maxlength = 150}) => {
   const shouldTrucate = text.length > maxlength;
   const displayText = expand? text: text.slice(0,maxlength);
   return (
-    <p className="text-sm text-gray-600">
+    <p className="text-sm text-gray-600 text-wrap">
     {displayText}
     {shouldTrucate && (
         <button onClick={()=>setExpand(!expand)}>

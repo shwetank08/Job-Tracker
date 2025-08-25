@@ -55,7 +55,7 @@ const SignIn = () => {
           <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
         </div>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
