@@ -1,32 +1,35 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchApplication } from "../utility/getAllApplicaiton";
 import { fetchJobDescription } from "../utility/getAllJobs";
-import ToggleText from "../utility/ToggleText";
 
 import { Filter, Search } from "lucide-react";
+import JobCard from "../helper/JobCard";
+
+const FILTER_OPTIONS = ["APPLY", "APPLIED", "INTERVIEWED", "OFFER", "REJECTED"];
 
 const Application = () => {
   const [application, setApplication] = useState([{}]);
   const [jobDetails, setJobDetails] = useState([{}]);
-  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
+
   useEffect(() => {
-    const loadApplication = async () => {
-      const data = await fetchApplication(
-        "http://localhost:5000/api/getapplications"
-      );
-      console.log(data);
-      setApplication(data.jobApplications);
-    };
+    const loadData = async () => {
+      try {
+        const apps = await fetchApplication(
+          "http://localhost:5000/api/getapplications"
+        );
+        setApplication(apps.jobApplications);
 
-    const loadJobDescription = async () => {
-      const description = await fetchJobDescription(
-        "http://localhost:5000/api/getalljobs"
-      );
-      setJobDetails(description.showAllJob);
+        const jobs = await fetchJobDescription(
+          "http://localhost:5000/api/getalljobs"
+        );
+        setJobDetails(jobs.showAllJob);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
     };
-
-    loadApplication();
-    loadJobDescription();
+    loadData();
   }, []);
 
   const JobMap = useMemo(() => {
@@ -37,73 +40,65 @@ const Application = () => {
     return map;
   }, [jobDetails]);
 
-  const appliedJobs = application.map((app) => ({
-    ...app,
-    jobList: JobMap[app.job],
-  }));
+  const appliedJobs = useMemo(() => {
+    return application.map((app) => ({
+      ...app,
+      jobList: JobMap[app.job],
+    }));
+  }, [application, JobMap]);
 
-  console.log(appliedJobs);
-
-  const handleSearch = () => {
-    
-  }
+  const handleFilterApplication = useMemo(() => {
+    return appliedJobs.filter((app) => {
+      const job = app.jobList;
+      if (!job) return false;
+      if (filter && app.status !== filter) return false;
+      const query = search.toLowerCase();
+      return (
+        job?.company?.toLowerCase().includes(query) ||
+        job?.position?.toLowerCase().includes(query) ||
+        job?.description?.toLowerCase().includes(query) ||
+        job?.position?.toLowerCase().includes(query)
+      );
+    });
+  }, [appliedJobs, search, filter]);
 
   return (
     <div className="p-6 max-w-5xl mx-auto flex justify-center items-center flex-col">
-      
       {/* Top Controls */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="flex items-center bg-white border rounded-lg px-3 py-2 shadow-sm w-full max-w-md">
+      <div className="flex items-center gap-4 mb-6 w-full max-w-3xl">
+        {/* Search Box */}
+        <div className="relative flex-1">
+          <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            value={query}
-            onChange={(e)=>setQuery(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search applications..."
-            className="ml-2 outline-none w-full text-sm"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
           />
         </div>
-        <button className="px-4 py-2" onClick={()=>handleSearch(query)}>
-          <Search className="w-6 h-6 text-indigo-600 transform transition-transform duration-300 hover:scale-105 cursor-pointer" />
-        </button>
-        <button className="px-4 py-2" onClick={handleFilter}>
-          <Filter className="w-6 h-6 text-indigo-600 transform transition-transform duration-300 hover:scale-105 cursor-pointer" />
-        </button>
+
+        {/* Filter Dropdown */}
+        <div className="relative">
+          <Filter className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="pl-10 pr-4 py-2 border rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+          >
+            <option value="">All</option>
+            {FILTER_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Job Application Cards */}
       {console.log(appliedJobs)}
-      {appliedJobs.length > 0 ? (
-        appliedJobs.map((element) => (
-          <div className="flex flex-col gap-4" key={element._id}>
-            <div
-              className="bg-white rounded-2xl shadow-md p-5 flex flex-col gap-3 
-                      hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-in-out cursor-pointer"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h1 className="text-lg font-semibold text-gray-900">
-                    {element.jobList?.company}
-                  </h1>
-                  <h2 className="text-sm text-gray-500">
-                    {element.jobList?.position}
-                  </h2>
-                </div>
-                <span className="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-600 font-medium">
-                  {element.status}
-                </span>
-              </div>
-
-              <ToggleText text={element.jobList?.description} maxLength={150} />
-
-              <p className="text-xs text-gray-400">
-                Applied on {new Date(element.appliedAt).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-500 text-sm">No applications found.</p>
-      )}
+      <JobCard Jobs={handleFilterApplication} />
     </div>
   );
 };
