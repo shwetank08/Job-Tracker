@@ -12,12 +12,12 @@ const Header = () => {
           <a href="#" className="hover:text-indigo-600 transition-colors">
             Dashboard
           </a>
-          <a href="#" className="hover:text-indigo-600 transition-colors">
+          <Link to="/jobs" className="hover:text-indigo-600 transition-colors">
             Jobs
-          </a>
-          <a href="#" className="hover:text-indigo-600 transition-colors">
+          </Link>
+          <Link to="/applications" className="hover:text-indigo-600 transition-colors">
             Application
-          </a>
+          </Link>
           <button className="hover:text-red-500 transition-colors">
             Logout
           </button>

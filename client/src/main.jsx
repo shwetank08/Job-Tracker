@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/authContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Application from "./components/Application.jsx";
 import Jobs from "./components/Jobs.jsx";
+import ApplyJob from "./components/ApplyJob.jsx";
 
 let appRouter = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ let appRouter = createBrowserRouter([
           { index: true, Component: Body },
           { path: "applications", Component: Application },
           { path: "jobs", Component: Jobs },
+          { path: "/apply/:id", Component: ApplyJob },
         ],
       },
       { path: "signin", Component: SignIn },

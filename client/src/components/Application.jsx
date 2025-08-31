@@ -5,7 +5,7 @@ import { fetchJobDescription } from "../utility/getAllJobs";
 import { Filter, Search } from "lucide-react";
 import JobCard from "../helper/JobCard";
 
-const FILTER_OPTIONS = ["APPLY", "APPLIED", "INTERVIEWED", "OFFER", "REJECTED"];
+const FILTER_OPTIONS = ["APPLIED", "INTERVIEWED", "OFFER", "REJECTED"];
 
 const Application = () => {
   const [application, setApplication] = useState([{}]);

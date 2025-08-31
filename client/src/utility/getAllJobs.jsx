@@ -16,6 +16,8 @@ export const fetchJobDescription = async (URL) => {
         throw new Error(`HTTP error! status: ${fetchmydata.status}`);
     }
     const data = await fetchmydata.json();
+    console.log(data);
+    
     return data;
   } catch (err) {
     console.log(err);
