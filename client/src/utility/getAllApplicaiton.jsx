@@ -21,3 +21,24 @@ export const fetchApplication = async (URL) => {
     console.log(err);
   }
 };
+export const submitApplication = async (URL, application) => {
+  try {
+    console.log(URL);
+    
+    const fetchmydata = await fetch(
+      URL,
+      {
+        method: "POST",
+        credentials: "include",
+        body: application
+      }
+    );
+    if (!fetchmydata) {
+        throw new Error(`HTTP error! status: ${fetchmydata.status}`);
+    }
+    const data = await fetchmydata.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};

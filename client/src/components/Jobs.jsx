@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { fetchJobDescription } from "../utility/getAllJobs";
 import ToggleText from "../utility/ToggleText";
 import { useNavigate } from "react-router-dom";
+import ApplyJob from "./ApplyJob";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [jobId, setJobId] = useState("");
 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -22,18 +24,19 @@ const Jobs = () => {
 
   const handleApply = (id) => {
     console.log(id);
-
-    console.log(`/apply/${id}`);
-    
-    navigate(`/apply/${id}`)
-  }
+    setJobId(id);
+    setIsOpen(true);
+  };
 
   return (
     <div className="min-h-screen px-4 sm:px-6 py-8 flex flex-col items-center">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-indigo-600 mb-6 sm:mb-8 text-center">
         Explore Jobs
       </h1>
-
+      {/* Diaglog box rendering */}
+      {isOpen && (
+        <ApplyJob id={jobId} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      )}
       <div className="w-full max-w-4xl space-y-6">
         {jobs.length === 0 ? (
           <div className="text-center text-white text-lg">
@@ -64,7 +67,10 @@ const Jobs = () => {
                   {job.status || "Status"}
                 </span>
                 {job.status === "ACTIVE" ? (
-                  <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out" onClick={()=>handleApply(job._id)}>
+                  <button
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
+                    onClick={() => handleApply(job._id)}
+                  >
                     Apply
                   </button>
                 ) : (
