@@ -18,8 +18,12 @@ export const isLoggedIn = async (req, res, next) => {
     }
 
     const decode = jwt.verify(token, process.env.SECRET);
+    console.log("decode value", decode);
 
-    req.user = await User.findById(decode.id, "name email role");
+
+    req.user = await User.findById(decode.id).select("id name email role");
+    console.log("req.user - ", req.user);
+    
 
     next();
   } catch (err) {
@@ -42,6 +46,7 @@ export const isAdmin = async (req, res, next) => {
     }
 
     const decode = jwt.verify(token, process.env.SECRET);
+    
 
     req.user = await User.findById(decode.id, "name email role");
     

@@ -10,7 +10,7 @@ import { fetchJobDescription } from "../utility/getAllJobs";
 import { useParams } from "react-router-dom";
 import { submitApplication } from "../utility/getAllApplicaiton";
 
-const ApplyJob = ({ id, isOpen, onClose }) => {
+const ApplyJob = ({ id, isOpen, onClose, refreshJobs }) => {
   const { user } = useAuth();
   const [resumeName, setResumeName] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
@@ -41,6 +41,8 @@ const ApplyJob = ({ id, isOpen, onClose }) => {
         application
       );
       console.log("Application submitted:", res);
+      refreshJobs?.();
+      console.log(refreshJobs);
       onClose();
     } catch (err) {
       console.error("Failed to submit application", err);
@@ -132,7 +134,7 @@ const ApplyJob = ({ id, isOpen, onClose }) => {
                   onClose();
                 }}
                 className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 transition"
-              >
+              >  
                 Submit Application
               </button>
             </div>

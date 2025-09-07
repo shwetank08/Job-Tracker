@@ -11,14 +11,15 @@ const Jobs = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAllJobs = async () => {
+  const fetchAllJobs = async () => {
       const fetchJobs = await fetchJobDescription(
         "http://localhost:5000/api/getalljobs"
       );
-      console.log(fetchJobs.showAllJob);
+      console.log("show ALL jobs --",fetchJobs.showAllJob);
       setJobs(fetchJobs.showAllJob);
-    };
+  };
+
+  useEffect(() => {
     fetchAllJobs();
   }, []);
 
@@ -35,7 +36,7 @@ const Jobs = () => {
       </h1>
       {/* Diaglog box rendering */}
       {isOpen && (
-        <ApplyJob id={jobId} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <ApplyJob id={jobId} isOpen={isOpen} onClose={() => setIsOpen(false)} refreshJobs={fetchAllJobs}/>
       )}
       <div className="w-full max-w-4xl space-y-6">
         {jobs.length === 0 ? (
@@ -64,9 +65,9 @@ const Jobs = () => {
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600`}
                 >
-                  {job.status || "Status"}
+                  {job.applicationStatus? job.applicationStatus:job.status}
                 </span>
-                {job.status === "ACTIVE" ? (
+                {job.applicationStatus === "ACTIVE" ? (
                   <button
                     className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
                     onClick={() => handleApply(job._id)}
